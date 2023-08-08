@@ -11,8 +11,8 @@ namespace GenericValidator.Core
         IGenericValidatorBase AddRule<T>
             (T input, Func<object, bool> condition, Action action);
 
-        IGenericValidatorBase AddRuleSet
-        (string ruleSetName, Action action);
+        IGenericValidatorBase AddRuleSet<T>
+            (string ruleSetName, Action<IGenericValidatorBase> action);
 
         ValidationResult RunValidator();
 

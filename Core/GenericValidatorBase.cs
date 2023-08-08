@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,16 +43,19 @@ public class GenericValidatorBase : AbstractValidator<object>, IGenericValidator
     }
 
     IGenericValidatorBase IGenericValidatorBase.AddRule<T>
-        (T input, Func<object,bool> condition, Action action)
+        (T input, Func<object, bool> condition, Action action)
     {
         When(condition, action);
 
         return this;
     }
 
-    public IGenericValidatorBase AddRuleSet(string ruleSetName, Action action)
+    public IGenericValidatorBase AddRuleSet<T>(string ruleSetName, Action<IGenericValidatorBase> action)
     {
-        RuleSet(ruleSetName, action);
+        RuleSet(ruleSetName, () =>
+        {
+            action(this);
+        });
 
         return this;
     }
